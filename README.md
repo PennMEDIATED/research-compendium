@@ -60,7 +60,8 @@ Decide before launch whether the Compendium should link out to that dashboard, d
 Sitewide conventions, identical across every Penn MEDIATED repo:
 
 - Two families only — `--f-serif` (EB Garamond) and `--f-sans` (DM Sans). No monospace face anywhere.
-- Serif is for headings; running prose is sans. The page title, entry titles and the detail headings are the serif exceptions by design.
+- **The split is by what the text *is*, not by heading level.** Serif takes page titles and the titles of works or names of people; sans takes section headings, card and UI labels, running prose, metadata and controls. **A section heading is not serif.** Here that means `.intro__title` (the page) and `.entry__title` (a paper — a work) are EB Garamond, while `.entry__detail h4` ("Overview", "Why is this important?") is DM Sans, because those label a section rather than name a work.
+- Weight is not yet standardised across serif titles — 500, 600 and 700 are all in use sitewide. 600 is the default for a new one.
 - Uppercase micro-labels ("Key takeaway", "Center newsletter", the theme chips) are DM Sans 700 uppercase at `--fs-micro`.
 - **12px is the floor.** Nothing on the page ships smaller — the old page had four sizes below it.
 - Heading scale at desktop: 56 / 40 / 24px (`--fs-h1` / `--fs-h2` / `--fs-h3`). The clamps interpolate across the viewport, so tablet needs no separate breakpoint.
