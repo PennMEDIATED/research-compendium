@@ -2,7 +2,7 @@
 
 Penn research on the quantitative study of the information ecosystem and its impact on democracy, curated and translated for journalists, media leaders, civil society organisations and policymakers. 68 entries across seven themes.
 
-This is the rebranded replacement for [`Penn-MEDIATED/Research-Compendium`](https://github.com/Penn-MEDIATED/Research-Compendium), the version currently live at infodem.upenn.edu/research-compendium. Content is carried over unchanged; everything about how it looks and behaves is rebuilt on the sitewide standards. See "What changed from the old page" below.
+This is the rebranded replacement for [`Penn-MEDIATED/Research-Compendium`](https://github.com/Penn-MEDIATED/Research-Compendium), the version currently live at mediated.upenn.edu/research-compendium. Content is carried over unchanged; everything about how it looks and behaves is rebuilt on the sitewide standards. See "What changed from the old page" below.
 
 ## What's in this repo
 
