@@ -6,8 +6,11 @@ This is the rebranded replacement for [`Penn-MEDIATED/Research-Compendium`](http
 
 ## What's in this repo
 
-- `index.html` — page markup, styling **and** behaviour in one file. Like `llm-civic-discourse` (and unlike its other siblings) this page is a small React app: React + ReactDOM + Babel Standalone from cdnjs, JSX compiled in the browser. No build step and no `npm install` — just a `<script type="text/babel">` instead of a plain `<script>`.
-- The entries live as an `ENTRIES` array at the top of that script. Design tokens are in the `<style>` block in `<head>`; page CSS follows them in the same block.
+- `index.html` — page markup and behaviour. Plain HTML and one plain `<script>`: no framework, no build step, no `npm install`.
+- `styles.css` — design tokens first, then page CSS. Same split as `home`, `about` and `events`.
+- The entries live as an `ENTRIES` array at the top of the script in `index.html`, followed by `THEME_ORDER` and `THEME_COLORS`.
+
+Top to bottom the page is: title and intro with the newsletter panel beside it → two theme charts ("Entries by theme", "Themes over time") → the filter strip → the entry list. The charts follow the filters, and selecting a bar or a heatmap cell sets the theme (and year) filter.
 
 ## Adding or editing an entry
 
@@ -15,10 +18,10 @@ Copy an existing object in `ENTRIES` and fill it in. Every field is required exc
 
 | Field | What it holds |
 | --- | --- |
-| `id` | Slug, unique on the page. Used as the React key and the detail panel's `id`. |
+| `id` | Slug, unique on the page. **Also the entry's permanent link** — `mediated.upenn.edu/research-compendium/#<id>` opens that entry — so never rename it once the entry ships. |
 | `title` | Paper title, plain text. |
-| `url` | Where the paper lives. Opens in a new tab. |
-| `faculty` | Penn faculty lead, exactly as it should read — this string also populates the faculty filter, so spelling must match across entries. |
+| `url` | Where the paper lives. Drives the entry's "Read paper ⟶" link, which opens in a new tab. |
+| `faculty` | Penn faculty lead, exactly as it should read. Co-leads are joined with ` & ` or ` and `; the faculty filter splits them, so each name must be spelled the same way across entries. |
 | `date` | Display date, `M/D/YYYY`. |
 | `year` | Integer. Drives the year filter and the default sort. |
 | `themes` | Array of one or more theme names. **Must** match a key in `THEME_COLORS`, or the tag falls back to grey. |
@@ -27,9 +30,11 @@ Copy an existing object in `ENTRIES` and fill it in. Every field is required exc
 | `overview` | Trusted HTML — the long summary. |
 | `importance` | Trusted HTML — the "Why is this important?" panel. Omit to hide the heading. |
 
-`overview` and `importance` are injected with `dangerouslySetInnerHTML` so the Center's hand-written `<ol class="findings-list">` blocks and `<strong>` lead-ins survive. **That means these two fields are trusted input.** Paste only Center-authored copy into them; never anything a visitor or a third party supplied.
+`overview` and `importance` are injected as raw HTML so the Center's hand-written `<ol class="findings-list">` blocks and `<strong>` lead-ins survive. **That means these two fields are trusted input.** Paste only Center-authored copy into them; never anything a visitor or a third party supplied.
 
-Adding a new theme means adding it to **both** `THEME_COLORS` and `THEME_ORDER` — the first gives it colours, the second puts it in the filter row.
+Adding a new theme means adding it to **both** `THEME_COLORS` and `THEME_ORDER` — the first gives it colours, the second puts it in the filter and the charts. A theme's `bg`, `border` and `text` are its tint, solid and text colours from the accent palette: the tag is the tint with a 1px solid border and dark text, and the solid is also the dot beside the theme in both charts.
+
+Updating the newsletter panel: it lists the two most recent issues. Add the new one at the top of `.newsletter__list` and drop the oldest.
 
 ## What changed from the old page
 
@@ -48,6 +53,29 @@ Content is identical. The presentation was rebuilt to the standards in these REA
 | Dropdown marker | Browser default on `<select>` | The sitewide chevron, `appearance: none` |
 
 The one thing carried over as-is: the auto-resize `postMessage`, which the old page already had.
+
+## Accent palette
+
+The sitewide secondary colours, chosen for this page and meant to replace the per-page theme palettes in `llm-civic-discourse` and `grants-overview` (and the exploratory "Secondary colors" list in `grants`' README). Tokens are `--c-acc-N`, `--c-acc-N-tint` and `--c-acc-N-text` in `styles.css`.
+
+| Slot | Name | Solid | Tint | Text on tint | Text on solid | Compendium theme |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Purple (`--c-accent`) | `#5533ee` | `#ebe7fd` | `#3d3c86` | white | Political Polarization |
+| 2 | Orange-red (`--c-red`) | `#f03d1f` | `#fce4dc` | `#7b2719` | black | Misinformation |
+| 3 | Teal | `#2bccb4` | `#e6f9f6` | `#005b4a` | black | Social Media & Platforms |
+| 4 | Magenta | `#d120a9` | `#f9e4f5` | `#6f285c` | white | Persuasion & Behavior Change |
+| 5 | Berry | `#861d77` | `#f0e4ef` | `#6d2961` | white | 2020 Meta Election Project |
+| 6 | Azure | `#268bfc` | `#e5f1ff` | `#0e4786` | black | LLMs & Civic Discourse |
+| 7 | Green | `#1b9247` | `#e4f2e9` | `#005820` | black | Guiding the Field |
+| 8 | Lilac | `#b7a0fb` | `#f6f4ff` | `#4d3680` | black | — (spare; `llm-civic-discourse` needs 8) |
+
+- **Tag style: light, sitewide.** A tag is the tint as its fill, a 1px border in the solid, and the text colour — the same treatment as `llm-civic-discourse`. Use it for every tag in a list. Solid fills are only for a few highlight elements where there are only a handful on screen (chart dots and bars, a selected filter, `grants-overview`'s three pillar tabs); there, use the "Text on solid" column.
+- **Take slots in order.** A page with three categories uses 1–3; one with eight uses all of them. That keeps the same colour meaning "first category" everywhere.
+- **Tints** are each solid at 12% on white. Slots 1 and 2 land on the site's existing light purple and `--c-pale-orange`.
+- **Text on a tint** clears 7:1. **Text on a solid** is white or `--c-dark`, whichever has more contrast — the "Text on solid" column.
+- **Checked for colour-blind readers, every pair against every other**, not just neighbours, because an entry can carry any two themes side by side (dataviz palette validator, all-pairs: worst ΔE 9.2 under deuteranopia, 17.2 in normal vision — both pass). Don't swap one colour without re-running that check.
+- Teal and lilac are pale as small marks on white (under 3:1). They pass here because every chart mark on this page sits next to its text label; don't use them as the only cue anywhere.
+- `--c-red` (slot 2) is the non-clickable brand orange, so a slot-2 tag doesn't read as a link. Clickable things stay `--c-red-dark`.
 
 ## Overlap with `llm-civic-discourse` — unresolved
 
@@ -72,7 +100,16 @@ Sitewide conventions, identical across every Penn MEDIATED repo:
 - One `.wrap` handles the page width: 1440px cap, 80px side padding, stepping to 32px under 900px and 20px under 480px.
 - The filter strip sits on `--c-light-bg` and spans the full viewport width; the wrap goes inside it, never around it. Same rule as every coloured section sitewide.
 - The entry row is a 4-column grid (title / faculty / date / takeaway) that collapses to a 2-column named-area layout under 1100px and a single column under 600px. Every descendant carries `min-width: 0`, or a long unbroken title pushes past the card edge.
-- One entry is open at a time. The detail panel is unmounted when closed, so the page stays light with 68 entries on it.
+- An open entry's summary sits on `--c-light-bg` as three same-shaped cards: Overview on light purple (`--c-acc-1-tint`), "Why is this important?" on white with the brand-gradient top edge (its heading is EB Garamond 600 — a deliberate exception to the sans section-heading rule), and Key findings on `--c-pale-orange`; text is `--c-dark` in all three. The Overview/Why column split is set per entry from the two boxes' text lengths (`overviewShare()`, clamped 0.6–3×) so they end close in height, and the shorter one stretches to match; entries past the clamp keep natural heights rather than leave a mostly empty box. The Overview is on the left and "Why is this important?" as a raised card on the right, topped with the brand gradient (the card stacks below the Overview under 900px; entries without `importance` get the Overview full width). When an overview's list is introduced by a findings lead-in ("Key findings include:", "Here's what they found:", …), the list moves into its own full-width **Key findings** section below that row (one numbered column) and the lead-in sentence is dropped, since the heading replaces it; the pattern is `FINDINGS_LEAD` in the script. A list introduced any other way stays inside the Overview. Either way items are numbered in the sitewide ordinal style: `01`, DM Sans 800, `--c-red`, baseline-aligned (same as `grants` / `grants-rfp`).
+- One entry is open at a time. The detail panel is only rendered while open, so the page stays light with 68 entries on it.
+- A column header row ("Title / Penn faculty lead / Date / Key takeaway") sits above the list on the same 4-column grid as the entries. Under 1100px it's hidden and each entry shows small "Penn faculty lead" and "Date" labels above those values instead.
+- Faculty names link to their profile on `team-faculty` (`mediated.upenn.edu/team-faculty/#<id>`, opened in a new tab). They're set in the body colour and turn `--c-red-dark` on hover. The name → id map is `FACULTY_IDS` in the script; **add a line there when a new faculty lead appears**, or their name shows as plain text. Co-leads link separately.
+- The top of each entry is a plain container (it holds those links, and a link can't sit inside a `<button>`). Clicking anywhere in it still opens or closes the entry; the keyboard control is the footer's "Full summary & details" / "Show less" button.
+- Each entry ends with a footer row: "Read paper ⟶" (category 2), "Copy link" and the "Full summary & details" toggle on the left, the theme tags on the right under the takeaway column (they drop below, left-aligned, on phones). Opening the entry puts the summary above that footer, so the same toggle — now "Show less" — stays at the bottom and closing it scrolls back to the top of the entry.
+- The charts can be hidden with the "Hide theme charts" disclosure above them (sitewide chevron style). They're open by default; a visitor's choice is remembered in their browser (`localStorage`, key `pm-compendium-charts`) where storage is allowed, and the frame height follows automatically.
+- The two charts sit side by side above 900px and stack below it (each capped at 720px so the bars don't stretch across a tablet). Under 600px their row labels wrap to fit a phone.
+- The filter strip is a single row on desktop and becomes an even grid under 1100px (search on its own row, then the four dropdowns) and a two-column grid under 600px.
+- No dark mode, on purpose: the page sits inside a white WordPress page, and a frame that followed the visitor's OS theme would render as a dark block in it.
 
 ## Embedding this page
 
@@ -101,12 +138,26 @@ Divi caches its compiled CSS to a static file, so clear that cache (Divi → The
 On Divi 4 this was all different: a **Fullwidth Section** holding a **Fullwidth Code** module, with separate CSS ID and CSS Class fields on the Advanced tab. Divi 5 removed the section-type chooser (the add-section button offers flex and grid layout options now) and folded ID and class into Advanced → **Attributes**, so ignore Divi 4 tutorials on both points. The embed snippet itself:
 
 ```html
-<iframe id="pm-research-compendium" src="https://pennmediated.github.io/research-compendium/" title="Research Compendium — Penn MEDIATED" scrolling="no" loading="lazy" style="width:100%;height:14000px;border:0;display:block"></iframe><script>(function(){var f=document.getElementById('pm-research-compendium');window.addEventListener('message',function(e){if(e.source!==f.contentWindow)return;var d=e.data||{},h=d.frameHeight||(d.type==='partners-page-resize'?d.height:0);if(h)f.style.height=h+'px';});})();</script>
+<iframe id="pm-research-compendium" data-src="https://pennmediated.github.io/research-compendium/" title="Research Compendium — Penn MEDIATED" scrolling="no" allow="clipboard-write" style="width:100%;height:14000px;border:0;display:block"></iframe><script>(function(){var f=document.getElementById('pm-research-compendium');f.src=f.getAttribute('data-src')+location.hash;window.addEventListener('message',function(e){if(e.source!==f.contentWindow)return;var d=e.data||{},h=d.frameHeight||(d.type==='partners-page-resize'?d.height:0);if(h)f.style.height=h+'px';if(typeof d.frameScrollTo==='number')window.scrollTo({top:f.getBoundingClientRect().top+window.pageYOffset+d.frameScrollTo-120});});window.addEventListener('hashchange',function(){f.contentWindow.postMessage({pmHash:location.hash},'*');});})();</script>
 ```
 
 The `height` in the snippet is only the starting value. Every Penn MEDIATED page posts its real height to the parent as `{ frameHeight: <int> }` — on load, on resize, once webfonts settle, and on any `ResizeObserver` change, so expanding an entry resizes the frame. The listener in the snippet applies it. `grants-rfp` also emits an older `{ type: 'partners-page-resize', height }` message; the snippet accepts both.
 
 The page checks `window.self === window.top` before posting, so opening it directly does nothing.
+
+### Entry links ("Copy link")
+
+"Copy link" copies `https://mediated.upenn.edu/research-compendium/#<entry id>` (the address is `PAGE_URL` in the script). Opening it expands that entry and scrolls to it. A cross-origin iframe can't see the WordPress page's address, so the snippet above does three extra things, and all three matter:
+
+- `src` is set from `data-src` **plus the WordPress page's `#hash`**, so the frame loads already knowing which entry to open. (That is also why the snippet has no `loading="lazy"` — a lazy frame wouldn't load until scrolled to.)
+- A later `#hash` change on the WordPress page is forwarded into the frame as `{ pmHash }`.
+- When the page opens an entry it posts `{ frameScrollTo: <px> }`, and the snippet scrolls the WordPress page to it. The `- 120` leaves room for the site header; change it if the header height changes.
+
+`allow="clipboard-write"` lets the frame use the Clipboard API; without it Chrome refuses clipboard writes from a cross-origin frame. The page also falls back to the older copy command, but keep the attribute.
+
+**Replacing an older embed:** the previous snippet had none of this, so entry links opened the page at the top. Paste the whole new snippet over the old one in the Code module.
+
+Opened directly (not embedded), the page reads its own `#hash`, so `pennmediated.github.io/research-compendium/#<id>` works too.
 
 ## Images and video
 
@@ -138,7 +189,7 @@ GIF is the big one. It has no interframe compression, so a screen recording is r
 
 Find the CSS box the image renders into, then export at **2×** that width for retina. Anything beyond that is bytes the browser downloads and immediately throws away. (`gni-membership.png` was 7992px wide, rendering into a 319px box — a 470KB file doing a 33KB job.)
 
-This repo currently ships no images. Its markup is JSX compiled in the browser by Babel, so if you add one, remember that attribute values in JSX inline styles must be quoted strings — and put `width`/`height` on the tag as usual.
+This repo currently ships no images. If you add one, put `width`/`height` on the tag as usual.
 
 If you are adding an image somewhere not listed, measure the box first (`getBoundingClientRect().width` in the browser, at a 1440px viewport) and double it.
 
