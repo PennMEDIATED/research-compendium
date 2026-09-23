@@ -1477,11 +1477,18 @@ $('entries').addEventListener('click', ev => {
   const el = document.querySelector(`.entry[data-entry="${CSS.escape(id)}"]`);
   if (!el) return;
   el.querySelector('[data-toggle]').focus({ preventScroll: true });
-  // Closing from the footer of a long summary: bring the entry's top back into
-  // view, since the content above the reader just vanished.
-  if (closing && btn) {
-    if (EMBEDDED) window.parent.postMessage({ frameScrollTo: Math.round(el.getBoundingClientRect().top + window.pageYOffset) }, '*');
-    else if (el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: 'start' });
+  // Opening an entry — or closing one from its footer — brings the entry's
+  // top into view. Opening matters because only one entry is open at a
+  // time: closing a long summary further up the page shifts everything below
+  // it upward, so the entry just opened would otherwise start above the
+  // screen. Embedded, the page asks the parent WordPress page to scroll.
+  if (!closing || btn) {
+    if (EMBEDDED) {
+      window.parent.postMessage({ frameScrollTo: Math.round(el.getBoundingClientRect().top + window.pageYOffset) }, '*');
+    } else {
+      const top = el.getBoundingClientRect().top;
+      if (top < 0 || top > window.innerHeight * 0.5) el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   }
 });
 
