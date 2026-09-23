@@ -1,6 +1,6 @@
 # Penn MEDIATED — Research Compendium
 
-Penn research on the quantitative study of the information ecosystem and its impact on democracy, curated and translated for journalists, media leaders, civil society organisations and policymakers. 68 entries across seven themes.
+Penn research on the quantitative study of the information ecosystem and its impact on democracy, curated and translated for journalists, media leaders, civil society organisations and policymakers. 69 entries across seven themes.
 
 This is the rebranded replacement for [`Penn-MEDIATED/Research-Compendium`](https://github.com/Penn-MEDIATED/Research-Compendium), the version currently live at mediated.upenn.edu/research-compendium. Content is carried over unchanged; everything about how it looks and behaves is rebuilt on the sitewide standards. See "What changed from the old page" below.
 
@@ -79,7 +79,7 @@ The sitewide secondary colours, chosen for this page and meant to replace the pe
 
 ## Overlap with `llm-civic-discourse` — unresolved
 
-18 of these 68 entries carry the **LLMs & Civic Discourse** theme, and there is a separate `llm-civic-discourse` repo holding 87 papers on that same topic. Nothing is currently done about the duplication — the two pages are independent, with their own entry lists and their own theme vocabularies.
+18 of these 69 entries carry the **LLMs & Civic Discourse** theme, and there is a separate `llm-civic-discourse` repo holding 87 papers on that same topic. Nothing is currently done about the duplication — the two pages are independent, with their own entry lists and their own theme vocabularies.
 
 Decide before launch whether the Compendium should link out to that dashboard, drop the overlapping entries, or keep both. Whichever way it goes, the two entry lists are maintained by hand and will drift.
 
@@ -101,7 +101,7 @@ Sitewide conventions, identical across every Penn MEDIATED repo:
 - The filter strip sits on `--c-light-bg` and spans the full viewport width; the wrap goes inside it, never around it. Same rule as every coloured section sitewide.
 - The entry row is a 4-column grid (title / faculty / date / takeaway) that collapses to a 2-column named-area layout under 1100px and a single column under 600px. Every descendant carries `min-width: 0`, or a long unbroken title pushes past the card edge.
 - An open entry's summary sits on `--c-light-bg` as three same-shaped cards: Overview on light purple (`--c-acc-1-tint`), "Why is this important?" on white with the brand-gradient top edge (its heading is EB Garamond 600 — a deliberate exception to the sans section-heading rule), and Key findings on `--c-pale-orange`; text is `--c-dark` in all three. The Overview/Why column split is set per entry from the two boxes' text lengths (`overviewShare()`, clamped 0.6–3×) so they end close in height, and the shorter one stretches to match; entries past the clamp keep natural heights rather than leave a mostly empty box. The Overview is on the left and "Why is this important?" as a raised card on the right, topped with the brand gradient (the card stacks below the Overview under 900px; entries without `importance` get the Overview full width). When an overview's list is introduced by a findings lead-in ("Key findings include:", "Here's what they found:", …), the list moves into its own full-width **Key findings** section below that row (one numbered column) and the lead-in sentence is dropped, since the heading replaces it; the pattern is `FINDINGS_LEAD` in the script. A list introduced any other way stays inside the Overview. Either way items are numbered in the sitewide ordinal style: `01`, DM Sans 800, `--c-red`, baseline-aligned (same as `grants` / `grants-rfp`).
-- One entry is open at a time. The detail panel is only rendered while open, so the page stays light with 68 entries on it.
+- One entry is open at a time. The detail panel is only rendered while open, so the page stays light with 69 entries on it.
 - A column header row ("Title / Penn faculty lead / Date / Key takeaway") sits above the list on the same 4-column grid as the entries. Under 1100px it's hidden and each entry shows small "Penn faculty lead" and "Date" labels above those values instead.
 - Faculty names link to their profile on `team-faculty` (`mediated.upenn.edu/team-faculty/#<id>`, opened in a new tab). They're set in the body colour and turn `--c-red-dark` on hover. The name → id map is `FACULTY_IDS` in the script; **add a line there when a new faculty lead appears**, or their name shows as plain text. Co-leads link separately.
 - The top of each entry is a plain container (it holds those links, and a link can't sit inside a `<button>`). Clicking anywhere in it still opens or closes the entry; the keyboard control is the footer's "Full summary & details" / "Show less" button.
