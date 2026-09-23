@@ -70,7 +70,7 @@ The sitewide secondary colours, chosen for this page and meant to replace the pe
 | 8 | Lilac | `#b7a0fb` | `#f6f4ff` | `#4d3680` | black | — (spare; `llm-civic-discourse` needs 8) |
 
 - **Tag style: light, sitewide.** A tag is the tint as its fill, a 1px border in the solid, and the text colour — the same treatment as `llm-civic-discourse`. Use it for every tag in a list. Solid fills are only for a few highlight elements where there are only a handful on screen (chart dots and bars, a selected filter, `grants-overview`'s three pillar tabs); there, use the "Text on solid" column.
-- **Take slots in order.** A page with three categories uses 1–3; one with eight uses all of them. That keeps the same colour meaning "first category" everywhere.
+- **Same topic, same colour across pages.** A category that means the same thing on another research page takes that page's colour (Misinformation = orange-red 2, Persuasion = magenta 4, political bias / polarization = purple 1, AI & LLMs = azure 6, media ecosystem / platforms = teal 3). Otherwise take slots in order. `llm-civic-discourse` (`TAG_COLORS` in `vendor/app.js`) and `grants-overview` (`--pillar-*` in `styles.css`) follow this.
 - **Tints** are each solid at 12% on white. Slots 1 and 2 land on the site's existing light purple and `--c-pale-orange`.
 - **Text on a tint** clears 7:1. **Text on a solid** is white or `--c-dark`, whichever has more contrast — the "Text on solid" column.
 - **Checked for colour-blind readers, every pair against every other**, not just neighbours, because an entry can carry any two themes side by side (dataviz palette validator, all-pairs: worst ΔE 9.2 under deuteranopia, 17.2 in normal vision — both pass). Don't swap one colour without re-running that check.
