@@ -30,7 +30,9 @@
   </div>
 </header>
 
-<section class="glance" aria-label="The compendium at a glance">
+<!-- Theme charts hidden for now (Sept 2026). Remove "hidden" to bring them back;
+     the rendering code still runs, so nothing else needs to change. -->
+<section class="glance" aria-label="The compendium at a glance" hidden>
   <div class="wrap">
     <button class="glance__toggle" id="glance-toggle" type="button" aria-expanded="true" aria-controls="glance-body">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 5l5 5 5-5" stroke="var(--c-red-dark)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1340,10 +1342,12 @@ function splitOverview(html) {
   }
   let intro = m[1];
   while (FINDINGS_LEAD.test(intro)) intro = intro.replace(FINDINGS_LEAD, '$1'); // some entries repeat the lead-in
-  // A lead-in that introduces recommendations only (no findings) titles the
-  // box "Key recommendations"; everything else stays "Key findings".
+  // The box heading follows the lead-in: recommendations only -> "Key
+  // recommendations"; findings and recommendations (net neutrality) -> "Key
+  // findings and recommendations"; everything else -> "Key findings".
   const lead = m[1].match(FINDINGS_LEAD)[0];
-  const heading = /recommendation/i.test(lead) && !/finding|result|found/i.test(lead) ? 'Key recommendations' : 'Key findings';
+  const recs = /recommendation/i.test(lead), finds = /finding|result|found/i.test(lead);
+  const heading = recs && finds ? 'Key findings and recommendations' : recs ? 'Key recommendations' : 'Key findings';
   intro = intro.replace(/\s+$/, '') + '</p>';
   if (/<p>\s*<\/p>$/.test(intro)) intro = intro.replace(/<p>\s*<\/p>$/, '');
   return { overview: intro, findings: numberList(list) + after, heading };
@@ -1414,7 +1418,7 @@ function renderList(rows, animate = true) {
       <div class="entry__footer">
         <div class="entry__actions">
           ${e.url ? `<a class="link-independent" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">Read paper <span aria-hidden="true">&#10230;</span></a>` : ''}
-          <button class="copy-link" type="button" data-copy="${esc(e.id)}" aria-label="Copy link to this entry">${LINK_ICON}<span>Copy link</span></button>
+          <button class="copy-link" type="button" data-copy="${esc(e.id)}" aria-label="Copy link to this entry">${LINK_ICON}<span>Copy entry link</span></button>
           <button class="entry__toggle" type="button" data-toggle="${esc(e.id)}" aria-expanded="${open}" aria-controls="d-${esc(e.id)}">${CHEVRON}${open ? 'Show less' : 'Full summary &amp; details'}</button>
         </div>
         <div class="entry__themes">${e.themes.map(themeBadge).join('')}</div>
@@ -1482,7 +1486,7 @@ $('entries').addEventListener('click', ev => {
     copyText(PAGE_URL + '#' + cp.dataset.copy)
       .then(() => { label.textContent = 'Link copied'; cp.classList.add('is-done'); })
       .catch(() => { label.textContent = 'Copy failed'; })
-      .finally(() => setTimeout(() => { label.textContent = 'Copy link'; cp.classList.remove('is-done'); }, 2000));
+      .finally(() => setTimeout(() => { label.textContent = 'Copy entry link'; cp.classList.remove('is-done'); }, 2000));
     return;
   }
   if (ev.target.closest('a')) return; // faculty and paper links navigate; they don't toggle the entry
@@ -1566,7 +1570,23 @@ window.addEventListener('message', e => {
   if (e.source !== window.parent || !e.data || typeof e.data.pmHash !== 'string') return;
   openFromHash(e.data.pmHash);
 });
-if (!openFromHash(location.hash)) render();
+/* Deep link opened in a new tab while embedded. WordPress (Divi) scrolls the
+   page back to the top once it finishes loading, whenever the URL has a
+   #hash. That can land after this page has already asked to be scrolled to
+   the entry, which is the "jumps to the entry, then bounces to the top"
+   visitors saw. So repeat the request a few times over the first seconds
+   after load, and stop as soon as the visitor scrolls, taps or types
+   themselves. The parent embed snippet also re-applies it (see README). */
+function holdInitialScroll(id) {
+  if (!EMBEDDED) return;
+  let stopped = false;
+  const stop = () => { stopped = true; };
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev => window.addEventListener(ev, stop, { once: true, passive: true }));
+  const later = () => [250, 700, 1500, 3000].forEach(ms => setTimeout(() => { if (!stopped) scrollToEntry(id); }, ms));
+  if (document.readyState === 'complete') later(); else window.addEventListener('load', later, { once: true });
+}
+if (openFromHash(location.hash)) holdInitialScroll(decodeURIComponent(location.hash.slice(1)));
+else render();
 </script>
 
   <!-- Auto-resize when embedded: posts this page's height to the parent so an

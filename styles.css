@@ -83,7 +83,8 @@ button { font: inherit; color: inherit; }
 @media (max-width: 480px) { .wrap { padding-inline: var(--space-250); } }
 
 /* ---- Page header. No eyebrow above the page title (sitewide rule). ---- */
-.intro { padding-top: var(--space-500); padding-bottom: var(--space-500); }
+/* 80px from the site menu to the title, as on every page. */
+.intro { padding-top: var(--space-1000); padding-bottom: var(--space-500); }
 .intro__title {
   font-family: var(--f-serif); font-size: var(--fs-h1); font-weight: 600;
   line-height: var(--lh-display); color: var(--c-accent); margin-bottom: var(--space-250);
@@ -137,6 +138,7 @@ button { font: inherit; color: inherit; }
 
 /* ---- At a glance: the two theme charts, between the header and the filters ---- */
 .glance { padding-bottom: var(--space-500); }
+.glance[hidden] { display: none; }
 /* Divider across the full page width that fades out toward both edges, with
    a soft shadow falling below its centre, so the chart section reads as its
    own layer (after the old compendium's control bar). .glance is full width;
