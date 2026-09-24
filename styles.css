@@ -255,7 +255,7 @@ button { font: inherit; color: inherit; }
 
 /* ---- Entry list ---- */
 .entries-head {
-  display: grid; grid-template-columns: 2fr 190px 90px 2.2fr; gap: var(--space-300);
+  display: grid; grid-template-columns: 2fr 150px 84px 2.6fr; gap: var(--space-300);
   /* 1px extra each side = the entry card's border, so the labels sit over the columns */
   padding: var(--space-300) calc(var(--space-250) + 1px) var(--space-100);
   border-bottom: 1px solid var(--c-border);
@@ -275,12 +275,18 @@ button { font: inherit; color: inherit; }
 /* Sitewide card treatment (llm-civic-discourse .paper-row, team-leadership
    .person-card): fade-slide in, then lift with depth on hover. */
 @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-.entry { border: 1px solid var(--c-border); border-radius: var(--radius-card); background: var(--c-bg); transition: box-shadow 0.15s, transform 0.15s; }
+.entry { border: 1px solid var(--c-border); border-radius: var(--radius-card); background: var(--c-bg); transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s; }
 .entries.is-entering .entry { animation: fadeSlideIn 0.3s ease both; }
-.entry:hover, .entry:focus-within { box-shadow: var(--shadow-lift); transform: translateY(-4px); }
+/* Hover: the lift, plus a brand-purple border and a purple-tinted shadow, so
+   the entry under the pointer stands out clearly from its neighbours. */
+.entry:hover, .entry:focus-within {
+  transform: translateY(-4px);
+  border-color: var(--c-accent);
+  box-shadow: 0 14px 30px rgba(85, 51, 238, 0.18);
+}
 
 .entry__top {
-  display: grid; grid-template-columns: 2fr 190px 90px 2.2fr; gap: var(--space-300); align-items: start;
+  display: grid; grid-template-columns: 2fr 150px 84px 2.6fr; gap: var(--space-300); align-items: start;
   padding: var(--space-250) var(--space-250) var(--space-150); cursor: pointer; text-align: left; width: 100%;
   background: none; border: 0; scroll-margin-top: var(--space-800);
 }
@@ -305,8 +311,10 @@ button { font: inherit; color: inherit; }
   padding: var(--space-025) var(--space-100); vertical-align: middle; border-radius: var(--radius-control);
 }
 .entry__meta { font-size: var(--fs-small); }
-.entry__label { font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-red); margin-bottom: var(--space-075); }
-.entry__takeaway { font-size: var(--fs-small); font-weight: 300; line-height: var(--lh-body); }
+/* No orange "Key takeaway" label on each entry: the column header names it, and
+   under 1100px it gets the same gray cell label as faculty and date. The
+   takeaway is the entry's main read, so it runs at body size in the widest column. */
+.entry__takeaway { font-size: var(--fs-body); font-weight: 300; line-height: var(--lh-body); color: var(--c-dark); }
 /* Disclosure — the sitewide chevron, never the browser's own. */
 .entry__toggle { display: inline-flex; align-items: center; gap: var(--space-075); font-size: var(--fs-small); color: var(--c-red-dark); }
 .entry__toggle svg { transition: transform 0.25s; flex-shrink: 0; }
