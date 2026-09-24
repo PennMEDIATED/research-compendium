@@ -1411,6 +1411,7 @@ function renderList(rows, animate = true) {
         </div>
       </div>
       ${open ? `<div class="entry__detail${e.importance ? ' entry__detail--aside' : ''}${e.importance && overviewUneven(parts.overview, e.importance) ? ' entry__detail--uneven' : ''}" id="d-${esc(e.id)}"${e.importance ? ` style="--ov: ${overviewShare(parts.overview, e.importance)}"` : ''}>
+        <div class="entry__keytake"><h4>Key takeaway</h4><p>${esc(e.takeaway)}</p></div>
         <div class="entry__overview"><h4>Overview</h4><div>${parts.overview}</div></div>
         ${e.importance ? `<aside class="entry__why"><h4>Why is this important?</h4><div>${e.importance}</div></aside>` : ''}
         ${parts.findings ? `<section class="entry__findings"><h4>${parts.heading}</h4>${parts.findings}</section>` : ''}

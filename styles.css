@@ -270,7 +270,9 @@ button { font: inherit; color: inherit; }
    linked heading: no underline, no arrow). */
 .faculty-link { color: var(--c-dark); transition: color 0.15s; }
 .faculty-link:hover { color: var(--c-red-dark); }
-.entries { padding-top: var(--space-300); padding-bottom: var(--space-1000); display: flex; flex-direction: column; gap: var(--space-150); }
+/* No bottom padding: the global footer's 132px white signal band is the gap
+   before the footer on every page. */
+.entries { padding-top: var(--space-300); padding-bottom: 0; display: flex; flex-direction: column; gap: var(--space-150); }
 
 /* Sitewide card treatment (llm-civic-discourse .paper-row, team-leadership
    .person-card): fade-slide in, then lift with depth on hover. */
@@ -278,8 +280,11 @@ button { font: inherit; color: inherit; }
 .entry { border: 1px solid var(--c-border); border-radius: var(--radius-card); background: var(--c-bg); transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s; }
 .entries.is-entering .entry { animation: fadeSlideIn 0.3s ease both; }
 /* Hover: the lift, plus a brand-purple border and a purple-tinted shadow, so
-   the entry under the pointer stands out clearly from its neighbours. */
-.entry:hover, .entry:focus-within {
+   the entry under the pointer stands out clearly from its neighbours. Hover
+   only, not :focus-within: clicking an entry leaves focus on its toggle, and
+   that kept the last-clicked entry highlighted after the pointer moved on.
+   Keyboard users still get each button's own focus ring. */
+.entry:hover {
   transform: translateY(-4px);
   border-color: var(--c-accent);
   box-shadow: 0 14px 30px rgba(85, 51, 238, 0.18);
@@ -374,13 +379,28 @@ button { font: inherit; color: inherit; }
 /* Three boxes in an open entry, all the same card shape: Overview on light
    purple, "Why is this important?" on white with the gradient top edge, Key
    findings on light orange. Text stays --c-dark in all three. */
-.entry__overview, .entry__why, .entry__findings {
+.entry__keytake, .entry__overview, .entry__why, .entry__findings {
   position: relative; overflow: hidden;
   border: 1px solid var(--c-border); border-radius: var(--radius-card);
   box-shadow: 0 16px 40px rgba(13,13,12,0.10);
   padding: var(--space-300);
 }
 .entry__overview { background: var(--c-acc-1-tint); }
+/* Key takeaway, featured: the first card in an open entry, full width, on the
+   brand gradient. While the entry is open the takeaway leaves the top row, so
+   it isn't shown twice. White text on the gradient's orange end is about
+   3.9:1, so it is set large and semi-bold (WCAG "large text"). */
+.entry__keytake {
+  grid-column: 1 / -1;
+  background: linear-gradient(150deg, #5533ee 0%, #df3611 81%);
+  border-color: transparent; color: var(--c-white);
+}
+.entry__detail .entry__keytake h4 {
+  font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: var(--space-100); color: var(--c-white);
+}
+.entry__detail .entry__keytake p { font-size: var(--fs-lede); font-weight: 600; line-height: var(--lh-lede); color: var(--c-white); }
+.entry.is-open .entry__takeaway-col { display: none; }
 .entry__why { background: var(--c-white); }
 .entry__findings { background: var(--c-pale-orange); }
 /* "Why is this important?" is set as a title (serif 600) by request; the
@@ -419,7 +439,7 @@ button { font: inherit; color: inherit; }
 .finding__body { flex: 1 1 auto; min-width: 0; }
 /* A list left inside the Overview (no findings lead-in) is one column. */
 .entry__overview ol.findings { margin-bottom: var(--space-200); }
-@media (max-width: 600px) { .entry__overview, .entry__why, .entry__findings { padding: var(--space-250) var(--space-200); } }
+@media (max-width: 600px) { .entry__keytake, .entry__overview, .entry__why, .entry__findings { padding: var(--space-250) var(--space-200); } }
 
 .entry__detail li { font-size: var(--fs-body); font-weight: 300; line-height: var(--lh-body); }
 .entry__detail strong { font-weight: 600; }
