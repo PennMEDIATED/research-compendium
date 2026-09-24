@@ -1313,7 +1313,7 @@ const FACULTY_IDS = {
    ways."), the list stays inside the Overview, untouched. Either way each
    item gets the sitewide ordinal treatment: "01", DM Sans 800, --c-red
    (grants / grants-rfp numbering). */
-const FINDINGS_LEAD = /(^|[.!?:>"”])\s*(?:Here(?:'|’|&#8217;)?s what they found|Here are (?:[^.:<]*?)(?:findings|results)(?:[^.:<]*?)|(?:Other )?[Kk]ey findings(?: include)?|These are (?:a )?few of their (?:key )?findings|They found that)\s*:\s*$/;
+const FINDINGS_LEAD = /(^|[.!?:>"”])\s*(?:Here(?:'|’|&#8217;)?s what they found|Here are (?:[^.:<]*?)(?:findings|results)(?:[^.:<]*?)|(?:Other )?[Kk]ey findings(?: include)?|These are (?:a )?few of their (?:key )?findings|They found that|Key recommendations(?: for [^.:<]*?)?(?: include)?)\s*:\s*$/;
 function numberList(olHtml) {
   const tpl = document.createElement('template');
   tpl.innerHTML = olHtml;
@@ -1340,9 +1340,13 @@ function splitOverview(html) {
   }
   let intro = m[1];
   while (FINDINGS_LEAD.test(intro)) intro = intro.replace(FINDINGS_LEAD, '$1'); // some entries repeat the lead-in
+  // A lead-in that introduces recommendations only (no findings) titles the
+  // box "Key recommendations"; everything else stays "Key findings".
+  const lead = m[1].match(FINDINGS_LEAD)[0];
+  const heading = /recommendation/i.test(lead) && !/finding|result|found/i.test(lead) ? 'Key recommendations' : 'Key findings';
   intro = intro.replace(/\s+$/, '') + '</p>';
   if (/<p>\s*<\/p>$/.test(intro)) intro = intro.replace(/<p>\s*<\/p>$/, '');
-  return { overview: intro, findings: numberList(list) + after };
+  return { overview: intro, findings: numberList(list) + after, heading };
 }
 
 /* Overview : "Why is this important?" column split. Width is given in
@@ -1405,7 +1409,7 @@ function renderList(rows, animate = true) {
       ${open ? `<div class="entry__detail${e.importance ? ' entry__detail--aside' : ''}${e.importance && overviewUneven(parts.overview, e.importance) ? ' entry__detail--uneven' : ''}" id="d-${esc(e.id)}"${e.importance ? ` style="--ov: ${overviewShare(parts.overview, e.importance)}"` : ''}>
         <div class="entry__overview"><h4>Overview</h4><div>${parts.overview}</div></div>
         ${e.importance ? `<aside class="entry__why"><h4>Why is this important?</h4><div>${e.importance}</div></aside>` : ''}
-        ${parts.findings ? `<section class="entry__findings"><h4>Key findings</h4>${parts.findings}</section>` : ''}
+        ${parts.findings ? `<section class="entry__findings"><h4>${parts.heading}</h4>${parts.findings}</section>` : ''}
       </div>` : ''}
       <div class="entry__footer">
         <div class="entry__actions">
