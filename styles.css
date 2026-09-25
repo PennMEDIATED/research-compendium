@@ -297,8 +297,7 @@ button { font: inherit; color: inherit; }
 }
 .entry__top, .entry__top *, .entry__footer, .entry__footer * { min-width: 0; }
 
-/* Titles match the key takeaway beside them: same family, size, weight and leading. */
-.entry__title { font-family: var(--f-sans); font-size: var(--fs-body); font-weight: 300; line-height: var(--lh-body); color: var(--c-dark); margin-bottom: var(--space-100); }
+.entry__title { font-family: var(--f-serif); font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-title); margin-bottom: var(--space-100); }
 /* The "New" badge sits in its own column; the title wraps beside it, never under it. */
 .entry__title { display: flex; align-items: baseline; gap: var(--space-100); }
 .entry__title .badge-new { flex: none; margin-right: 0; }
@@ -404,9 +403,6 @@ button { font: inherit; color: inherit; }
 .entry.is-open .entry__takeaway-col { display: none; }
 .entry__why { background: var(--c-white); }
 .entry__findings { background: var(--c-pale-orange); }
-/* "Why is this important?" is set as a title (serif 600) by request; the
-   Overview and Key findings headings stay sans. */
-.entry__why h4 { font-family: var(--f-serif); font-weight: 600; }
 .entry__why::before {
   content: ''; position: absolute; inset: 0 0 auto 0; height: 4px;
   background: linear-gradient(150deg, #5533ee 0%, #df3611 81%);
@@ -415,6 +411,15 @@ button { font: inherit; color: inherit; }
   .entry__detail--aside { grid-template-columns: minmax(0, 1fr); }
 }
 .entry__detail h4 { font-size: var(--fs-h3); font-weight: 700; line-height: var(--lh-heading); margin-bottom: var(--space-150); }
+/* The card headings (Overview, Why is this important?, Key findings /
+   recommendations) use the Key takeaway heading's style: small, bold,
+   uppercase, tracked. Dark text on their light cards. */
+.entry__detail .entry__overview > h4,
+.entry__detail .entry__why > h4,
+.entry__detail .entry__findings > h4 {
+  font-family: var(--f-sans); font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; line-height: var(--lh-heading); margin-bottom: var(--space-100); color: var(--c-dark);
+}
 .entry__detail p { font-size: var(--fs-body); font-weight: 300; line-height: var(--lh-body); margin-bottom: var(--space-200); }
 .entry__detail p:last-child { margin-bottom: 0; }
 .entry__detail ol, .entry__detail ul { display: flex; flex-direction: column; gap: var(--space-150); padding-left: var(--space-300); margin-bottom: var(--space-200); }
