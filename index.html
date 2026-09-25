@@ -1581,7 +1581,8 @@ window.addEventListener('message', e => {
 function holdInitialScroll(id) {
   if (!EMBEDDED) return;
   let stopped = false;
-  const stop = () => { stopped = true; };
+  // Tell the parent too, so its own load-time re-scroll backs off as well.
+  const stop = () => { if (stopped) return; stopped = true; try { parent.postMessage({ frameUserScroll: true }, '*'); } catch (e) {} };
   ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev => window.addEventListener(ev, stop, { once: true, passive: true }));
   const later = () => [250, 700, 1500, 3000].forEach(ms => setTimeout(() => { if (!stopped) scrollToEntry(id); }, ms));
   if (document.readyState === 'complete') later(); else window.addEventListener('load', later, { once: true });

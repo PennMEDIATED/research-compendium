@@ -297,7 +297,8 @@ button { font: inherit; color: inherit; }
 }
 .entry__top, .entry__top *, .entry__footer, .entry__footer * { min-width: 0; }
 
-.entry__title { font-family: var(--f-serif); font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-title); margin-bottom: var(--space-100); }
+/* Titles match the key takeaway beside them: same family, size, weight and leading. */
+.entry__title { font-family: var(--f-sans); font-size: var(--fs-body); font-weight: 300; line-height: var(--lh-body); color: var(--c-dark); margin-bottom: var(--space-100); }
 /* The "New" badge sits in its own column; the title wraps beside it, never under it. */
 .entry__title { display: flex; align-items: baseline; gap: var(--space-100); }
 .entry__title .badge-new { flex: none; margin-right: 0; }
