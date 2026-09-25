@@ -396,8 +396,8 @@ button { font: inherit; color: inherit; }
   border-color: transparent; color: var(--c-white);
 }
 .entry__detail .entry__keytake h4 {
-  font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; margin-bottom: var(--space-100); color: var(--c-white);
+  font-size: var(--fs-body); font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: var(--space-150); color: var(--c-white);
 }
 .entry__detail .entry__keytake p { font-size: var(--fs-lede); font-weight: 600; line-height: var(--lh-lede); color: var(--c-white); }
 .entry.is-open .entry__takeaway-col { display: none; }
@@ -412,13 +412,13 @@ button { font: inherit; color: inherit; }
 }
 .entry__detail h4 { font-size: var(--fs-h3); font-weight: 700; line-height: var(--lh-heading); margin-bottom: var(--space-150); }
 /* The card headings (Overview, Why is this important?, Key findings /
-   recommendations) use the Key takeaway heading's style: small, bold,
+   recommendations) use the Key takeaway heading's style: 16px, extra-bold (800),
    uppercase, tracked. Dark text on their light cards. */
 .entry__detail .entry__overview > h4,
 .entry__detail .entry__why > h4,
 .entry__detail .entry__findings > h4 {
-  font-family: var(--f-sans); font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; line-height: var(--lh-heading); margin-bottom: var(--space-100); color: var(--c-dark);
+  font-family: var(--f-sans); font-size: var(--fs-body); font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; line-height: var(--lh-heading); margin-bottom: var(--space-150); color: var(--c-dark);
 }
 .entry__detail p { font-size: var(--fs-body); font-weight: 300; line-height: var(--lh-body); margin-bottom: var(--space-200); }
 .entry__detail p:last-child { margin-bottom: 0; }
